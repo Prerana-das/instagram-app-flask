@@ -1,6 +1,8 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
+
+import Posts from './components/Posts.vue'
 </script>
 
 <template>
@@ -8,12 +10,15 @@ import TheWelcome from './components/TheWelcome.vue'
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    
     </div>
+
+    
   </header>
 
   <main>
-    <TheWelcome />
+    <h1>Welcome to your Vue.js Apppppp</h1>
+    <posts />
   </main>
 </template>
 
