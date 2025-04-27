@@ -1,0 +1,11 @@
+python3 -m venv venv
+source venv/bin/activate
+
+
+python app.py
+
+--for db
+pip install pymysql
+pip install cryptography
+
+winpty python
