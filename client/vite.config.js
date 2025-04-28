@@ -15,4 +15,15 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  // Flask backend
+  server: {
+    port: 5000, //
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5001', // Flask is now on same port
+        changeOrigin: true,
+      }
+    }
+  },
 })
+

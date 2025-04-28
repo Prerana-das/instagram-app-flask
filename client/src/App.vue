@@ -1,26 +1,19 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-
-import Posts from './components/Posts.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-    
-    </div>
-
-    
-  </header>
-
-  <main>
-    <h1>Welcome to your Vue.js Apppppp</h1>
-    <posts />
-  </main>
+  <div>
+    <header>
+      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+    </header>
+  
+    <main>
+      <!-- The current route component will be displayed here -->
+      <router-view></router-view>
+    </main>
+  </div>
 </template>
+
+<script setup>
+
+</script>
 
 <style scoped>
 header {
