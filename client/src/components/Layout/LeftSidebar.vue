@@ -1,18 +1,19 @@
+<!-- LeftSidebar.vue with Tailwind -->
 <template>
-  <aside class="w-60 h-screen fixed left-0 top-0 bg-black text-white p-4 flex flex-col">
-    <h1 class="text-2xl font-bold mb-8">Logo</h1>
-    <nav class="flex flex-col gap-4">
-      <a href="#" class="hover:text-gray-400">Home</a>
-      <a href="#" class="hover:text-gray-400">Search</a>
-      <a href="#" class="hover:text-gray-400">Explore</a>
-      <a href="#" class="hover:text-gray-400">Reels</a>
-      <a href="#" class="hover:text-gray-400">Messages</a>
-      <a href="#" class="hover:text-gray-400">Notifications</a>
-      <a href="#" class="hover:text-gray-400">Create</a>
-      <a href="#" class="hover:text-gray-400">Profile</a>
+  <aside class="w-[240px] fixed left-0 h-screen p-5 border-r border-ig-border-dark bg-ig-dark">
+    <div class="py-3 pb-8">
+      <img src="" class="w-32" alt="Instagram">
+    </div>
+    
+    <nav class="space-y-2">
+      <RouterLink 
+        to="/"
+        class="flex items-center gap-4 p-3 rounded-lg hover:bg-ig-dark-secondary text-white"
+      >
+        <HomeIcon class="w-6 h-6" />
+        <span>Home</span>
+      </RouterLink>
+      <!-- Repeat for other nav items -->
     </nav>
   </aside>
 </template>
-
-<script setup>
-</script>

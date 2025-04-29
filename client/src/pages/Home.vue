@@ -1,6 +1,18 @@
 <template>
   <LayoutWrapper>
-    <div class="flex flex-col gap-6">
+
+     <template>
+    <h1 class="text-3xl font-bold text-ig-dark-secondary bg-emerald-400 p-4">
+        Test Tailwind
+    </h1>
+    </template>
+    <div v-if="loading" class="flex justify-center items-center h-[calc(100vh-5rem)]">
+      <p class="text-gray-400">Loading posts...</p>
+    </div>
+
+   
+
+    <div v-else class="flex flex-col gap-6">
       <PostItem v-for="post in posts" :key="post.id" :post="post" />
     </div>
   </LayoutWrapper>
@@ -9,9 +21,24 @@
 <script setup>
 import LayoutWrapper from '@/components/Layout/LayoutWrapper.vue'
 import PostItem from '@/components/Feed/PostItem.vue'
+import { onMounted, ref } from 'vue'
+import { apiGet } from '@/services/api'  // Common API function
 
-const posts = [
-  { id: 1, user: 'John Doe', caption: 'Amazing day!', image: 'https://picsum.photos/600/400?1' },
-  { id: 2, user: 'Jane Smith', caption: 'Love this view!', image: 'https://picsum.photos/600/400?2' },
-]
+const posts = ref([])
+const loading = ref(true)
+
+onMounted(async () => {
+  try {
+    const res = await apiGet('/api/posts')
+    console.log(res, 'Fetched posts')
+
+    if (res) {
+      posts.value = res
+    }
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+  } finally {
+    loading.value = false
+  }
+})
 </script>
