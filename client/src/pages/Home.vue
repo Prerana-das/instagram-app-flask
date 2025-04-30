@@ -1,17 +1,8 @@
 <template>
   <LayoutWrapper>
-
-     <template>
-    <h1 class="text-3xl font-bold text-ig-dark-secondary bg-emerald-400 p-4">
-        Test Tailwind
-    </h1>
-    </template>
     <div v-if="loading" class="flex justify-center items-center h-[calc(100vh-5rem)]">
       <p class="text-gray-400">Loading posts...</p>
     </div>
-
-   
-
     <div v-else class="flex flex-col gap-6 w-[70%] mx-auto">
       <PostItem v-for="post in posts" :key="post.id" :post="post" />
     </div>
