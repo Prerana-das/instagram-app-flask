@@ -33,37 +33,48 @@ migrate = Migrate(app, db)
 # with app.app_context():
 #     db.create_all()
 
+
+# Serve the Vue app (Home page)
+# @app.route('/', defaults={'path': ''})
+@app.route('/')
+def serve_vue():
+    return send_from_directory('client/dist', 'index.html')
+
+@app.route('/<path:path>')
+def static_files(path):
+    return send_from_directory('client/dist', path)
+
+# @app.route('/<path:path>')
+# def serve_vue(path):
+#     if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+#         return send_from_directory(app.static_folder, path)
+#     else:
+#         return send_from_directory(app.static_folder, 'index.html')
+    
 # ------------------- API ROUTES -------------------
 
 # API to fetch posts
-# @app.route('/api/posts', methods=['GET'])
-# def get_posts():
-#     posts = Post.query.join(User).all()  # Assuming Post is related to User
-#      # Serialize the data with user info
-#     posts_list = [{
-#         'id': post.id,
-#         'caption': post.caption,
-#         'image_url': post.image_url,
-#         'user': {
-#             'id': post.author.id,
-#             'username': post.author.username,
-#              'profile': post.author.profile
+@app.route('/api/posts', methods=['GET'])
+def get_posts():
+    posts = Post.query.join(User).all()  # Assuming Post is related to User
+     # Serialize the data with user info
+    posts_list = [{
+        'id': post.id,
+        'caption': post.caption,
+        'image_url': post.image_url,
+        'user': {
+            'id': post.author.id,
+            'username': post.author.username,
+            'profile': post.author.profile
            
-#         }
-#     } for post in posts]
+        }
+    } for post in posts]
     
-#     return jsonify(posts_list)
+    return jsonify(posts_list)
 
 # ------------------- FRONTEND ROUTES -------------------
 
-# Serve the Vue app (Home page)
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve_vue(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+
 
 # -------------------------------------------------------
 

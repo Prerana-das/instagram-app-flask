@@ -25,7 +25,7 @@ class User(db.Model):
         secondaryjoin=(follower_following.c.followed_id == id),
         backref=db.backref('following', lazy='dynamic'), lazy='dynamic'
     )
-    notifications = db.relationship('Notification', backref='user', lazy=True)
+    # notifications = db.relationship('Notification', backref='user', lazy=True)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -63,6 +63,11 @@ class Notification(db.Model):
     type = db.Column(db.String(50), nullable=False)  # 'like', 'comment', 'follow'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     read = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))  # Nullable for follow notifications
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     triggered_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    user = db.relationship('User', foreign_keys=[user_id], backref=db.backref('notifications', lazy=True))
+    triggered_by = db.relationship('User', foreign_keys=[triggered_by_id])
