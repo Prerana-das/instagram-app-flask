@@ -12,7 +12,7 @@
 
    
 
-    <div v-else class="flex flex-col gap-6">
+    <div v-else class="flex flex-col gap-6 w-[70%] mx-auto">
       <PostItem v-for="post in posts" :key="post.id" :post="post" />
     </div>
   </LayoutWrapper>

@@ -2,7 +2,6 @@
 <template>
   <aside class="w-[240px] fixed left-0 h-screen p-5 border-r border-ig-border-dark bg-ig-dark">
     <div class="py-3 pb-8 italic text-2xl text-white text-center">
-      <!-- <img src="" class="w-32" alt="Instagram"> -->
       Instagram
     </div>
     
@@ -63,7 +62,6 @@
         <i class="fa-solid fa-right-from-bracket"></i>
         <span>Logout</span>
       </RouterLink>
-      <!-- Repeat for other nav items -->
     </nav>
   </aside>
 </template>
