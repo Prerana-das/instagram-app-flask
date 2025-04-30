@@ -9,6 +9,7 @@ class User(db.Model):
     name = db.Column(db.String(255))
     profile = db.Column(db.String(255))
     bio = db.Column(db.String(255))
+    posts = db.relationship('Post', backref='author', lazy=True)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -26,12 +26,19 @@ with app.app_context():
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
     posts = Post.query.join(User).all()  # Assuming Post is related to User
+     # Serialize the data with user info
     posts_list = [{
         'id': post.id,
-        # 'username': post.user.username,  # Uncomment if you have a relation
+        'caption': post.caption,
         'image_url': post.image_url,
-        'caption': post.caption
+        'user': {
+            'id': post.author.id,
+            'username': post.author.username,
+             'profile': post.author.profile
+           
+        }
     } for post in posts]
+    
     return jsonify(posts_list)
 
 # ------------------- FRONTEND ROUTES -------------------
