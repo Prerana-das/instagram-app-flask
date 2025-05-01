@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Navigate to repository root
-cd "$(dirname "$0")"  # Go to script's directory
-cd ..                # Move up to project root
+# Navigate to project root
+cd /home/site/wwwroot
 
 # Build Vue app
 echo "Building Vue app..."
@@ -15,6 +14,5 @@ echo "Starting Gunicorn..."
 cd ..
 gunicorn --bind=0.0.0.0:8000 \
          --workers=4 \
-         --timeout=120 \
          --pythonpath=. \
          app:app
