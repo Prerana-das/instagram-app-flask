@@ -9,3 +9,5 @@ pip install pymysql
 pip install cryptography
 
 winpty python
+
+# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://preranaadmin:helloworld123%40@instagram.mysql.database.azure.com/instagram_app'

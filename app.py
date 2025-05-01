@@ -13,20 +13,19 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 # Database configuration
 # app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:password@localhost:3306/instagram_app'
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://preranaadmin:helloworld123%40@instagram.mysql.database.azure.com/instagram_app'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
-db.init_app(app)
-from models import (
-    User, 
-    Post,
-    Comment,    
-    Like,
-    Message,
-    Notification
-)
-migrate = Migrate(app, db)
+# db.init_app(app)
+# from models import (
+#     User, 
+#     Post,
+#     Comment,    
+#     Like,
+#     Message,
+#     Notification
+# )
+# migrate = Migrate(app, db)
 
 
 
@@ -55,25 +54,26 @@ def static_files(path):
 # ------------------- API ROUTES -------------------
 
 # API to fetch posts
-@app.route('/api/posts', methods=['GET'])
-def get_posts():
-    posts = Post.query.join(User).all()  # Assuming Post is related to User
-     # Serialize the data with user info
-    posts_list = [{
-        'id': post.id,
-        'caption': post.caption,
-        'image_url': post.image_url,
-        'user': {
-            'id': post.author.id,
-            'username': post.author.username,
-            'profile': post.author.profile
+# @app.route('/api/posts', methods=['GET'])
+# def get_posts():
+#     posts = Post.query.join(User).all()  
+#     posts_list = [{
+#         'id': post.id,
+#         'caption': post.caption,
+#         'image_url': post.image_url,
+#         'user': {
+#             'id': post.author.id,
+#             'username': post.author.username,
+#             'profile': post.author.profile
            
-        }
-    } for post in posts]
+#         }
+#     } for post in posts]
     
-    return jsonify(posts_list)
+#     return jsonify(posts_list)
 
 # ------------------- FRONTEND ROUTES -------------------
+
+
 
 # -------------------------------------------------------
 

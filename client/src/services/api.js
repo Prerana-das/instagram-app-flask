@@ -13,6 +13,7 @@ async function request(method, endpoint, body = null) {
     })
     
     if (!res.ok) {
+      console.log(res)
       throw new Error(`HTTP error! status: ${res.status}`)
     }
 
