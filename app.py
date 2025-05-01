@@ -12,7 +12,8 @@ app = Flask(__name__, static_folder="client/dist", static_url_path="")
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 # Database configuration
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:password@localhost:3306/instagram_app'
+# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:password@localhost:3306/instagram_app'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://preranaadmin:helloworld123%40@instagram.mysql.database.azure.com/instagram_app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
@@ -73,8 +74,6 @@ def get_posts():
     return jsonify(posts_list)
 
 # ------------------- FRONTEND ROUTES -------------------
-
-
 
 # -------------------------------------------------------
 
