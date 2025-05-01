@@ -78,4 +78,5 @@ def static_files(path):
 # -------------------------------------------------------
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5001))  # 8000 on Azure, 5001 locally
+    app.run(host="0.0.0.0", port=port, debug=True)
