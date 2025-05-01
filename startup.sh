@@ -1,7 +1,10 @@
-# Start Gunicorn with explicit path
-gunicorn --bind=0.0.0.0:8000 \
-         --workers=4 \
-         --pythonpath=/home/site/wwwroot \
-         --access-logfile - \
-         --error-logfile - \
-         app:app
+#!/bin/bash
+
+# Navigate to client and build
+cd client
+npm install
+npm run build
+cd ..
+
+# Start Flask
+gunicorn --bind=0.0.0.0:8000 app:app
