@@ -66,12 +66,18 @@ migrate = Migrate(app, db)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def catch_all(path):
-    # if path.startswith('api/'):
-    #     return "Not Found", 404
+def serve_vue(path):
+    if path.startswith('api/'):
+        return "Not Found", 404
 
-    # Serve index.html for all frontend routes (Vue will handle them)
-    return send_from_directory(app.static_folder, 'index.html')
+    # This will serve the static file from `client/dist` for paths like `/profile`, `/about`, etc.
+    file_path = os.path.join(app.static_folder, path)
+    if os.path.exists(file_path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        # Return `index.html` for all routes (this allows Vue router to handle them)
+        return send_from_directory(app.static_folder, 'index.html')
+
 
 
 # API Route Example
