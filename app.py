@@ -1,12 +1,34 @@
-from flask import Flask, send_from_directory
+from flask import Flask, jsonify, send_from_directory
+from database import db
+from flask_migrate import Migrate
+from flask_cors import CORS
 import os
 
 app = Flask(__name__, static_folder="client/dist", static_url_path="/")
 
-# API Route Example
-@app.route('/api/posts')
-def get_posts():
-    return {"status": "API working"}
+# Enable CORS for API routes only
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+
+# ------------------ Database Config ------------------
+# Use environment variable or direct connection string
+# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:password@localhost:3306/instagram_app'
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    'DATABASE_URL',
+    'mysql+pymysql://preranaadmin:helloworld123%40@instagram.mysql.database.azure.com/instagram_app'
+)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize database
+db.init_app(app)
+from models import (
+    User, 
+    Post,
+    Comment,    
+    Like,
+    Message,
+    Notification
+)
+migrate = Migrate(app, db)
 
 # Serve Static Files
 @app.route('/<path:path>')
@@ -21,6 +43,24 @@ def serve_static(path):
 @app.route('/')
 def serve_root():
     return send_from_directory(app.static_folder, 'index.html')
+
+
+# API Route Example
+# ------------------ API Route ------------------
+@app.route('/api/posts')
+def get_posts():
+    posts = Post.query.join(User).all()
+    post_list = [{
+        'id': post.id,
+        'caption': post.caption,
+        'image_url': post.image_url,
+        'user': {
+            'id': post.author.id,
+            'username': post.author.username,
+            'profile': post.author.profile
+        }
+    } for post in posts]
+    return jsonify(post_list)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
