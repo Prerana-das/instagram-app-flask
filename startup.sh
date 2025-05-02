@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install Node.js
-export NVM_DIR="/usr/local/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+apt-get install -y nodejs
 
 # Use appropriate Node.js version
 nvm install 18
