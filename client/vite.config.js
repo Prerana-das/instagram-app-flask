@@ -6,6 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   build: {
     outDir: '../client/dist',  // 👈 Build into Flask's static folder
     emptyOutDir: true,
@@ -21,7 +22,7 @@ export default defineConfig({
   },
   // Flask backend
   server: {
-    port: 5000, //
+    port: 5173, //
     proxy: {
       '/api': {
         target: 'http://localhost:8000', 

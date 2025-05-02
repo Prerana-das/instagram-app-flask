@@ -1,16 +1,9 @@
 <template>
-  <div>
-    <div>
-      <!-- The current route component will be displayed here -->
-      <main>
-        <router-view />
-      </main>
-    </div>
-  </div>
+  <RouterView />
 </template>
 
 <script setup>
-
+import { RouterView } from 'vue-router'
 </script>
 
 <style scoped>

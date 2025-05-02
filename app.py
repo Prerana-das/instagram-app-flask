@@ -40,28 +40,37 @@ from models import (
 migrate = Migrate(app, db)
 
 # Serve Static Files
-@app.route('/<path:path>')
-# def serve_static(path):
+# @app.route('/<path:path>')
+# # def serve_static(path):
+# #     if path.startswith('api/'):
+# #         return "Not Found", 404
+# #     if os.path.exists(os.path.join(app.static_folder, path)):
+# #         return send_from_directory(app.static_folder, path)
+# #     return send_from_directory(app.static_folder, 'index.html')
+# def serve_vue(path):
 #     if path.startswith('api/'):
 #         return "Not Found", 404
-#     if os.path.exists(os.path.join(app.static_folder, path)):
-#         return send_from_directory(app.static_folder, path)
-#     return send_from_directory(app.static_folder, 'index.html')
-def serve_vue(path):
-    if path.startswith('api/'):
-        return "Not Found", 404
     
-    file_path = os.path.join(app.static_folder, path)
-    if os.path.exists(file_path):
-        return send_from_directory(app.static_folder, path)
-    else:
-        # Catch-all: return index.html for Vue routes like /profile
-        return send_from_directory(app.static_folder, 'index.html')
+#     file_path = os.path.join(app.static_folder, path)
+#     if os.path.exists(file_path):
+#         return send_from_directory(app.static_folder, path)
+#     else:
+#         # Catch-all: return index.html for Vue routes like /profile
+#         return send_from_directory(app.static_folder, 'index.html')
     
 
-# Catch Root Route
-@app.route('/')
-def serve_root():
+# # Catch Root Route
+# @app.route('/')
+# def serve_root():
+#     return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    # if path.startswith('api/'):
+    #     return "Not Found", 404
+
+    # Serve index.html for all frontend routes (Vue will handle them)
     return send_from_directory(app.static_folder, 'index.html')
 
 
