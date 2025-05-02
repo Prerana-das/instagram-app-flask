@@ -21,7 +21,7 @@ export default defineConfig({
   },
   // Flask backend
   server: {
-    port: 5000, //
+    port: 8000, //
     proxy: {
       '/api': {
         target: 'http://localhost:8000', 
