@@ -71,5 +71,13 @@ def get_posts():
     } for post in posts]
     return jsonify(post_list)
 
+@app.route('/api/dbtest')
+def db_test():
+    try:
+        users = User.query.all()
+        return {"status": "success", "user_count": len(users)}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}, 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
