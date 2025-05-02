@@ -4,10 +4,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 import os
 
-# app = Flask(__name__, static_folder="client/dist", static_url_path="/")
-app = Flask(__name__, 
-           static_folder="client/dist",
-           static_url_path="/static")
+app = Flask(__name__, static_folder="client/dist", static_url_path="/")
 
 # Enable CORS for API routes only
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
@@ -21,7 +18,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# SSL Required for Azure MySQL
+#  SSL Required for Azure MySQL
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'connect_args': {
         'ssl': {
@@ -43,43 +40,18 @@ from models import (
 migrate = Migrate(app, db)
 
 # Serve Static Files
-# @app.route('/<path:path>')
-# # def serve_static(path):
-# #     if path.startswith('api/'):
-# #         return "Not Found", 404
-# #     if os.path.exists(os.path.join(app.static_folder, path)):
-# #         return send_from_directory(app.static_folder, path)
-# #     return send_from_directory(app.static_folder, 'index.html')
-# def serve_vue(path):
-#     if path.startswith('api/'):
-#         return "Not Found", 404
-    
-#     file_path = os.path.join(app.static_folder, path)
-#     if os.path.exists(file_path):
-#         return send_from_directory(app.static_folder, path)
-#     else:
-#         # Catch-all: return index.html for Vue routes like /profile
-#         return send_from_directory(app.static_folder, 'index.html')
-    
-
-# # Catch Root Route
-# @app.route('/')
-# def serve_root():
-#     return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/static/<path:filename>')
-def static_files(filename):
-    return send_from_directory(app.static_folder, filename)
-
-# Catch-all route for Vue paths
-@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve_vue(path):
-    if path.startswith('api/') or path.startswith('static/'):
+def serve_static(path):
+    if path.startswith('api/'):
         return "Not Found", 404
-    
+    if os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
     return send_from_directory(app.static_folder, 'index.html')
 
+# Catch Root Route
+@app.route('/')
+def serve_root():
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 # API Route Example

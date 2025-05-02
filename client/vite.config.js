@@ -6,20 +6,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/static/',
-  // build: {
-  //   outDir: '../client/dist',  // 👈 Build into Flask's static folder
-  //   emptyOutDir: true,
-  // },
   build: {
-    outDir: '../client/dist',
+    outDir: '../client/dist',  // 👈 Build into Flask's static folder
     emptyOutDir: true,
-    manifest: true,
-    rollupOptions: {
-      input: {
-        main: './src/main.js'
-      }
-    }
   }, 
   plugins: [
     vue(),
@@ -32,7 +21,7 @@ export default defineConfig({
   },
   // Flask backend
   server: {
-    port: 5173, //
+    port: 5000, //
     proxy: {
       '/api': {
         target: 'http://localhost:8000', 
@@ -41,4 +30,3 @@ export default defineConfig({
     }
   },
 })
-
