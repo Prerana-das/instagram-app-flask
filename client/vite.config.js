@@ -6,10 +6,20 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: './',
+  base: '/static/',
+  // build: {
+  //   outDir: '../client/dist',  // 👈 Build into Flask's static folder
+  //   emptyOutDir: true,
+  // },
   build: {
-    outDir: '../client/dist',  // 👈 Build into Flask's static folder
+    outDir: '../client/dist',
     emptyOutDir: true,
+    manifest: true,
+    rollupOptions: {
+      input: {
+        main: './src/main.js'
+      }
+    }
   }, 
   plugins: [
     vue(),

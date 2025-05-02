@@ -4,8 +4,7 @@ import Profile from './pages/Profile.vue'
 import Settings from './pages/Settings.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
-  // history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',

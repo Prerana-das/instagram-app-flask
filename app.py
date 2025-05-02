@@ -4,7 +4,10 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 import os
 
-app = Flask(__name__, static_folder="client/dist", static_url_path="/")
+# app = Flask(__name__, static_folder="client/dist", static_url_path="/")
+app = Flask(__name__, 
+           static_folder="client/dist",
+           static_url_path="/static")
 
 # Enable CORS for API routes only
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
@@ -64,19 +67,18 @@ migrate = Migrate(app, db)
 # def serve_root():
 #     return send_from_directory(app.static_folder, 'index.html')
 
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory(app.static_folder, filename)
+
+# Catch-all route for Vue paths
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_vue(path):
-    if path.startswith('api/'):
+    if path.startswith('api/') or path.startswith('static/'):
         return "Not Found", 404
-
-    # This will serve the static file from `client/dist` for paths like `/profile`, `/about`, etc.
-    file_path = os.path.join(app.static_folder, path)
-    if os.path.exists(file_path):
-        return send_from_directory(app.static_folder, path)
-    else:
-        # Return `index.html` for all routes (this allows Vue router to handle them)
-        return send_from_directory(app.static_folder, 'index.html')
+    
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 
