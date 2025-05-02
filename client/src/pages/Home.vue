@@ -18,18 +18,18 @@ import { apiGet } from '@/services/api'  // Common API function
 const posts = ref([])
 const loading = ref(true)
 
-// onMounted(async () => {
-//   try {
-//     const res = await apiGet('/api/posts')
-//     console.log(res, 'Fetched posts')
+onMounted(async () => {
+  try {
+    const res = await apiGet('/api/posts')
+    console.log(res, 'Fetched posts')
 
-//     if (res) {
-//       posts.value = res
-//     }
-//   } catch (error) {
-//     console.error('Error fetching posts:', error)
-//   } finally {
-//     loading.value = false
-//   }
-// })
+    if (res) {
+      posts.value = res
+    }
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+  } finally {
+    loading.value = false
+  }
+})
 </script>
