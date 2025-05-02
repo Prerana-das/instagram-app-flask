@@ -18,6 +18,15 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# ✅ SSL Required for Azure MySQL
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'connect_args': {
+        'ssl': {
+            'ssl_ca': '/etc/ssl/certs/ca-certificates.crt'
+        }
+    }
+}
+
 # Initialize database
 db.init_app(app)
 from models import (
