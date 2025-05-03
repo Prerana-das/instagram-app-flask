@@ -16,7 +16,8 @@
 
         <!-- User Info -->
         <div>
-          <h2 class="text-2xl font-bold">{{ user.username }}</h2>
+          <h2 class="text-2xl font-bold">{{ user.name }}</h2> 
+          <p class="text-sm text-gray-400">@{{ user.username }}</p> 
           <div class="flex gap-6 mt-2 text-sm text-gray-400">
             <span><strong>{{ posts.length }}</strong> posts</span>
             <span><strong>{{ user.followers }}</strong> followers</span>

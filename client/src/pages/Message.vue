@@ -1,84 +1,68 @@
 <template>
-  <LayoutWrapper>
+ <LayoutWrapper>
     <div class="bg-black text-white min-h-screen px-6 py-10 max-w-4xl mx-auto">
-      <!-- Message Header -->
-      <div class="flex items-center gap-10 mb-10">
-        <!-- Message Picture -->
-        
-        <img
-          v-if="user.message !== null && user.message !== undefined"
-          class="w-24 h-24 rounded-full object-cover border border-gray-600"
-          :src="user.message || 'https://via.placeholder.com/150'"
-          alt="Message"
-        />
-        <div v-else class="bg-gray-700 h-12 w-12 rounded-full"></div> 
-        
+    <h2 class="text-xl font-bold text-white mb-4">Messages</h2>
 
-        <!-- User Info -->
-        <div>
-          <h2 class="text-2xl font-bold">{{ user.username }}</h2>
-          <div class="flex gap-6 mt-2 text-sm text-gray-400">
-            <span><strong>{{ posts.length }}</strong> posts</span>
-            <span><strong>{{ user.followers }}</strong> followers</span>
-            <span><strong>{{ user.following }}</strong> following</span>
-          </div>
-          <p class="mt-2 text-gray-300">{{ user.bio }}</p>
-        </div>
-      </div>
+    <div v-if="loading" class="text-gray-400">Loading messages...</div>
 
-      <!-- Posts Grid -->
-      <div v-if="posts.length" class="grid grid-cols-3 gap-4">
-        <div
-          v-for="post in posts"
-          :key="post.id"
-          class="relative group cursor-pointer aspect-square overflow-hidden"
-        >
-          <img
-            :src="post.image_url"
-            alt="Post"
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-          <!-- Optional overlay -->
-          <div
-            class="absolute inset-0 bg-black bg-opacity-30 hidden group-hover:flex items-center justify-center text-white"
-          >
-            <p class="text-sm font-medium px-2 text-center">{{ post.caption }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div v-else class="text-center text-gray-500 mt-10">No posts yet.</div>
+    <div v-else-if="conversations.length === 0" class="text-gray-400">
+      No messages yet.
     </div>
+
+    <div v-else>
+      <div
+        v-for="(conversation, index) in conversations"
+        :key="index"
+        class="flex items-center gap-4 p-4 border-b border-neutral-700 hover:bg-neutral-800 transition"
+      >
+        <img
+          v-if="conversation.user?.profile"
+          :src="conversation.user.profile || '/default-avatar.png'"
+          alt="Profile"
+          class="w-12 h-12 rounded-full object-cover"
+        />
+        <div v-else class="bg-gray-700 h-12 w-12 rounded-full"></div>
+        <div class="flex-1">
+          <h3 class="text-white font-medium">{{ conversation.user.username }}</h3>
+          <p class="text-gray-400 text-sm truncate">
+            {{ conversation.latest_message.content }}
+          </p>
+        </div>
+        <div class="text-gray-500 text-xs whitespace-nowrap">
+          {{ formatTimestamp(conversation.latest_message.timestamp) }}
+        </div>
+      </div>
+    </div>
+  </div>
   </LayoutWrapper>
 </template>
-
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import LayoutWrapper from '@/components/Layout/LayoutWrapper.vue'
 
-const user = ref(null)
-const posts = ref([])
+const conversations = ref([])
+const loading = ref(true)
 
-const fetchUserData = async () => {
+onMounted(async () => {
   try {
-    // 1. Get user from session
-    const sessionRes = await fetch('/api/session')
-    if (!sessionRes.ok) throw new Error('Failed to fetch session')
-    const sessionUser = await sessionRes.json()
-    user.value = sessionUser
+    const res = await fetch('/api/conversations')
+    const data = await res.json()
 
-    // 2. Get posts for this user
-    const postsRes = await fetch(`/api/users/${sessionUser.id}/posts`)
-    if (!postsRes.ok) throw new Error('Failed to fetch posts')
-    posts.value = await postsRes.json()
+    if (res.ok) {
+      conversations.value = data
+    } else {
+      console.error('Error:', data.error || 'Failed to fetch messages')
+    }
   } catch (err) {
-    console.error(err)
+    console.error('Fetch error:', err)
+  } finally {
+    loading.value = false
   }
-}
-
-onMounted(() => {
-  fetchUserData()
 })
-</script>
 
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp)
+  return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
+</script>

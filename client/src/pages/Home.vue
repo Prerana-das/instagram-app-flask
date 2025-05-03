@@ -13,15 +13,16 @@
 import LayoutWrapper from '@/components/Layout/LayoutWrapper.vue'
 import PostItem from '@/components/Feed/PostItem.vue'
 import { onMounted, ref } from 'vue'
-import { apiGet } from '@/services/api'  
+import { apiGet } from '@/services/api'
 import { useRouter } from 'vue-router'
 
 const posts = ref([])
 const loading = ref(true)
-
-const router = useRouter()
 const user = ref(null)
 
+const router = useRouter()
+
+// Fetch the logged-in user's session
 async function fetchSessionUser() {
   try {
     const res = await fetch('/api/session')
@@ -37,11 +38,13 @@ async function fetchSessionUser() {
   }
 }
 
+// Fetch posts when the component is mounted
 onMounted(async () => {
+  await fetchSessionUser()  // Ensure user is logged in before fetching posts
+  
   try {
     const res = await apiGet('/api/posts')
     console.log(res, 'Fetched posts')
-
     if (res) {
       posts.value = res
     }
@@ -52,8 +55,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-import { ref, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
-
-

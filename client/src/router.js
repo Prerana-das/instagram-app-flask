@@ -6,6 +6,7 @@ import CreatePost from './pages/CreatePost.vue'
 import Register from './pages/Register.vue'
 import Login from './pages/Login.vue'
 import Message from './pages/Message.vue'
+import Notification from './pages/Notification.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/message',
     name: 'Message',
     component: Message
+  },
+  {
+    path: '/notification',
+    name: 'Notification',
+    component: Notification
   },
 ]
 

@@ -7,6 +7,8 @@ import uuid
 from werkzeug.utils import secure_filename
 from flask_session import Session
 from flask_bcrypt import Bcrypt
+from sqlalchemy import func, or_, and_, case
+
 
 app = Flask(__name__, static_folder="client/dist", static_url_path="/")
 
@@ -69,18 +71,35 @@ def serve_root():
 # ------------------ API Route  ------------------
 @app.route('/api/posts')
 def get_posts():
+    user_id = session.get('user_id')  # Get current logged-in user
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
     posts = Post.query.join(User).order_by(Post.id.desc()).all()
-    post_list = [{
-        'id': post.id,
-        'caption': post.caption,
-        'image_url': post.image_url,
-        'user': {
-            'id': post.author.id,
-            'username': post.author.username,
-            'profile': post.author.profile
-        }
-    } for post in posts]
+    
+    post_list = []
+    for post in posts:
+        # Total likes
+        like_count = len(post.likes)
+
+        # Check if current user has liked this post
+        user_liked = any(like.user_id == user_id for like in post.likes)
+
+        post_list.append({
+            'id': post.id,
+            'caption': post.caption,
+            'image_url': post.image_url,
+            'likes': like_count,
+            'user_liked': user_liked,
+            'user': {
+                'id': post.author.id,
+                'username': post.author.username,
+                'profile': post.author.profile
+            }
+        })
+
     return jsonify(post_list)
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -250,6 +269,7 @@ def get_session_user():
     return jsonify({
         'id': user.id,
         'name': user.name,
+        'bio': user.bio,
         'username': user.username,
         'email': user.email,
         'profile': user.profile,
@@ -312,6 +332,117 @@ def update_profile():
     db.session.commit()
     return jsonify({'success': True})
 
+
+# ------------------ Message Route ------------------
+@app.route('/api/messages')
+def get_messages():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+
+    messages = Message.query.filter(
+        (Message.sender_id == user_id) | (Message.receiver_id == user_id)
+    ).order_by(Message.created_at.desc()).all()
+
+    result = []
+    for msg in messages:
+        result.append({
+            'id': msg.id,
+            'content': msg.content,
+            'created_at': msg.created_at.isoformat(),
+            'sender': {
+                'id': msg.sender.id,
+                'username': msg.sender.username
+            },
+            'receiver': {
+                'id': msg.receiver.id,
+                'username': msg.receiver.username
+            }
+        })
+    return jsonify(result)
+
+@app.route('/api/conversations')
+def get_conversations():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    # Get distinct users who have conversed with current user
+    distinct_users = db.session.query(
+        Message.receiver_id.label('other_user_id')
+    ).filter(Message.sender_id == user_id).union_all(
+        db.session.query(
+            Message.sender_id.label('other_user_id')
+        ).filter(Message.receiver_id == user_id)
+    ).distinct().subquery()
+
+    # Get latest message for each conversation
+    conversations = db.session.query(
+        User.id,
+        User.username,
+        User.profile,
+        Message.content,
+        Message.created_at
+    ).join(
+        Message,
+        or_(
+            and_(
+                Message.sender_id == user_id,
+                Message.receiver_id == User.id
+            ),
+            and_(
+                Message.receiver_id == user_id,
+                Message.sender_id == User.id
+            )
+        )
+    ).filter(
+        User.id.in_(db.session.query(distinct_users.c.other_user_id))
+    ).order_by(
+        Message.created_at.desc()
+    ).all()
+
+    # Group messages by user
+    grouped = {}
+    for conv in conversations:
+        other_user_id = conv.id
+        if other_user_id not in grouped:
+            grouped[other_user_id] = {
+                'user': {
+                    'id': conv.id,
+                    'username': conv.username,
+                    'profile': conv.profile
+                },
+                'latest_message': {
+                    'content': conv.content,
+                    'timestamp': conv.created_at.isoformat()
+                }
+            }
+
+    return jsonify(list(grouped.values()))
+
+
+@app.route('/api/posts/<int:post_id>/like', methods=['POST'])
+def like_post(post_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    # Check if user already liked this post
+    existing_like = Like.query.filter_by(user_id=user_id, post_id=post_id).first()
+    if existing_like:
+        db.session.delete(existing_like)
+        message = 'unliked'
+    else:
+        new_like = Like(user_id=user_id, post_id=post_id)
+        db.session.add(new_like)
+        message = 'liked'
+
+    db.session.commit()
+
+    # Return the new like count
+    like_count = Like.query.filter_by(post_id=post_id).count()
+
+    return jsonify({'likes': like_count, 'message': message})
 
 
 @app.route('/api/dbtest')

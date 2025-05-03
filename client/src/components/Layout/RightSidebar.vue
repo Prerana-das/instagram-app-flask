@@ -1,19 +1,24 @@
 <template>
   <aside class="w-80 h-screen fixed top-0 right-0 bg-black text-white p-4 flex flex-col border-l border-gray-800">
     <!-- Logged-in user info -->
-    <div v-if="user" class="flex items-center gap-4 mb-6">
-      <img
-        v-if="user.profile"
-        :src="user.profile"
-        alt="User Profile"
-        class="h-12 w-12 rounded-full object-cover"
-      />
-      <div v-else class="bg-gray-700 h-12 w-12 rounded-full"></div>
-      <div class="flex flex-col">
-        <p class="font-semibold">{{ user.username }}</p>
-        <p class="text-sm text-gray-400">{{ user.name }}</p>
+      <RouterLink 
+        to="/profile"
+        >
+      <div v-if="user" class="flex items-center gap-4 mb-6 cursor-pointer">
+            <img
+              v-if="user.profile"
+              :src="user.profile"
+              alt="User Profile"
+              class="h-12 w-12 rounded-full object-cover"
+            />
+            <div v-else class="bg-gray-700 h-12 w-12 rounded-full"></div>
+            <div class="flex flex-col">
+              <p class="font-semibold">{{ user.username }}</p>
+              <p class="text-sm text-gray-400">{{ user.name }}</p>
+            </div>
+        
       </div>
-    </div>
+     </RouterLink>
 
     <!-- Followers Section -->
     <h2 class="text-lg font-bold mb-4">All Followers</h2>

@@ -12,6 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     profile = db.Column(db.String(300))
     address = db.Column(db.String(300))
+    bio = db.Column(db.String(300))
     name = db.Column(db.String(300))
     password = db.Column(db.String(300))
     
