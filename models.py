@@ -12,6 +12,8 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     profile = db.Column(db.String(300))
     address = db.Column(db.String(300))
+    name = db.Column(db.String(300))
+    password = db.Column(db.String(300))
     
     # Relationships
     posts = db.relationship('Post', backref='author', lazy=True)
@@ -29,6 +31,7 @@ class User(db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(255))
     caption = db.Column(db.String(500))
     image_url = db.Column(db.String(300))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

@@ -28,21 +28,21 @@
         <span>Reels</span>
       </RouterLink>
       <RouterLink 
-        to="/"
+        to="/create"
         class="flex items-center gap-4 p-3 rounded-lg hover:bg-ig-dark-secondary text-white"
       >
         <i class="fa-solid fa-square-plus"></i>
         <span>Create Post</span>
       </RouterLink>
       <RouterLink 
-        to="/"
+        to="/profile"
         class="flex items-center gap-4 p-3 rounded-lg hover:bg-ig-dark-secondary text-white"
       >
         <i class="fa-solid fa-user"></i>
         <span>Profile</span>
       </RouterLink>
       <RouterLink 
-        to="/"
+        to="/settings"
         class="flex items-center gap-4 p-3 rounded-lg hover:bg-ig-dark-secondary text-white"
       >
         <i class="fa-solid fa-gear"></i>
@@ -56,12 +56,52 @@
         <span>Notification</span>
       </RouterLink>
       <RouterLink 
-        to="/"
+        to="/login"
         class="flex items-center gap-4 p-3 rounded-lg hover:bg-ig-dark-secondary text-white"
       >
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <span>Logout</span>
+        <i class="fa-solid fa-bell"></i>
+        <span>login</span>
       </RouterLink>
+      <RouterLink 
+        to="/register"
+        class="flex items-center gap-4 p-3 rounded-lg hover:bg-ig-dark-secondary text-white"
+      >
+        <i class="fa-solid fa-bell"></i>
+        <span>register</span>
+      </RouterLink>
+      <RouterLink 
+          to="/"
+          @click.prevent="handleLogout"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-ig-dark-secondary text-white"
+        >
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </RouterLink>
+
     </nav>
   </aside>
 </template>
+
+
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+async function handleLogout() {
+  try {
+    const res = await fetch('/api/logout', {
+      method: 'POST',
+      credentials: 'include', 
+    })
+
+    if (res.ok) {
+      router.push('/login')
+    } else {
+      console.error('Logout failed')
+    }
+  } catch (err) {
+    console.error('Error logging out:', err)
+  }
+}
+</script>

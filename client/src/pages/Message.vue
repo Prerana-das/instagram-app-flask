@@ -1,15 +1,15 @@
 <template>
   <LayoutWrapper>
     <div class="bg-black text-white min-h-screen px-6 py-10 max-w-4xl mx-auto">
-      <!-- Profile Header -->
+      <!-- Message Header -->
       <div class="flex items-center gap-10 mb-10">
-        <!-- Profile Picture -->
+        <!-- Message Picture -->
         
         <img
-          v-if="user.profile !== null && user.profile !== undefined"
+          v-if="user.message !== null && user.message !== undefined"
           class="w-24 h-24 rounded-full object-cover border border-gray-600"
-          :src="user.profile || 'https://via.placeholder.com/150'"
-          alt="Profile"
+          :src="user.message || 'https://via.placeholder.com/150'"
+          alt="Message"
         />
         <div v-else class="bg-gray-700 h-12 w-12 rounded-full"></div> 
         

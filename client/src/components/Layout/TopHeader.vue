@@ -7,7 +7,6 @@
       class="bg-gray-800 px-4 py-2 rounded-lg w-1/3 focus:outline-none focus:ring-2 focus:ring-gray-600"
     />
     <div class="flex items-center gap-4 text-2xl">
-      <button>🔔</button>
       <button>✉️</button>
       <button>⚙️</button>
     </div>

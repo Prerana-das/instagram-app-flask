@@ -13,10 +13,29 @@
 import LayoutWrapper from '@/components/Layout/LayoutWrapper.vue'
 import PostItem from '@/components/Feed/PostItem.vue'
 import { onMounted, ref } from 'vue'
-import { apiGet } from '@/services/api'  // Common API function
+import { apiGet } from '@/services/api'  
+import { useRouter } from 'vue-router'
 
 const posts = ref([])
 const loading = ref(true)
+
+const router = useRouter()
+const user = ref(null)
+
+async function fetchSessionUser() {
+  try {
+    const res = await fetch('/api/session')
+    if (res.ok) {
+      user.value = await res.json()
+    } else if (res.status === 401) {
+      router.push('/login') // Redirect if not logged in
+    } else {
+      console.error('Failed to fetch session user')
+    }
+  } catch (error) {
+    console.error('Error fetching session user:', error)
+  }
+}
 
 onMounted(async () => {
   try {
@@ -33,3 +52,8 @@ onMounted(async () => {
   }
 })
 </script>
+
+import { ref, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+
+
