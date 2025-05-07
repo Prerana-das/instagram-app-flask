@@ -21,11 +21,12 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 # ------------------ Database Config ------------------
 # Use environment variable or direct connection string
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:password@localhost:3306/instagram_app'
-# app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-#     'DATABASE_URL',
-#     'mysql+pymysql://preranaadmin:helloworld123%40@instagram.mysql.database.azure.com/instagram_app'
-# )
+# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:password@localhost:3306/instagram_app'
+# live database
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    'DATABASE_URL',
+    'mysql+pymysql://preranaadmin:helloworld123%40@instagram.mysql.database.azure.com/instagram_app'
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #  SSL Required for Azure MySQL
