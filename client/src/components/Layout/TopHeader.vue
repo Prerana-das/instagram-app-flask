@@ -1,6 +1,6 @@
 <template>
   <header class="fixed top-0 left-60 right-80 h-16 bg-black text-white flex items-center justify-between px-6 z-10 border-b border-gray-800">
-    <div class="font-bold text-xl">My Feed</div>
+    <div class="font-bold text-xl">My Insta Feed</div>
     <input
       type="text"
       placeholder="Search..."
